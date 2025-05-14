@@ -2,69 +2,126 @@
 
 /* 1) Reset básico y box-sizing */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  
-  /* 2) Layout móvil (100% ancho) */
-  body {
-    font-family: sans-serif;
-    line-height: 1.5;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* 2) html/body full-height y body flex-column */
+html, body {
+  height: 100%;
+}
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  font-family: sans-serif;
+  /* interlineado general tipo 1.5 */
+  line-height: 1.5;
+}
+
+/* 3) Wrapper que contiene header/nav/main y controla ancho y padding */
+.wrapper {
+  flex: 1;       /* empuja el footer abajo */
+  width: 100%;
+  padding: 1rem;
+}
+
+/* 4) Estructura interna */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#menu {
+  display: none;
+}
+
+#menu-btn {
+  font-size: 1.5rem;
+  background: none;
+  border: none;
+}
+
+/* 5) Interlineado en tu contenido */
+main section {
+  margin-bottom: 2rem;
+  line-height: 1.4;
+}
+
+/* 6) Form en grid de 2 columnas */
+main section form {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 1rem;
+  row-gap: 0.75rem;
+  align-items: center;
+}
+
+/* 7) El párrafo introductorio ocupa ambas columnas */
+main section form p {
+  grid-column: 1 / -1;
+  margin-bottom: 1rem;
+}
+
+/* 8) Labels alineados a la derecha */
+main section form label {
+  justify-self: end;
+}
+
+/* 9) Solo los inputs de tipo texto son full-width */
+main section form input[type="text"] {
+  width: 100%;
+}
+
+/* 10) Los botones mantienen su ancho original */
+main section form input[type="submit"],
+main section form input[type="reset"] {
+  width: auto;           /* ancho natural */
+  justify-self: start;   /* los coloca al inicio de su celda */
+}
+
+/* 10) Footer a todo ancho del viewport */
+footer {
+  background-color: #0e141a;
+  text-align: center;
+  padding: 1rem;
+  color: #ffffff;
+  width: 100%;
+}
+
+/* 11) Media Queries: tablet en adelante */
+@media (min-width: 600px) {
+  .wrapper {
+    max-width: 600px;
+    margin: 0 auto;
     padding: 1rem;
   }
-  
-  header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
+
   #menu {
+    display: block;
+  }
+
+  #menu-btn {
     display: none;
   }
-  
-  #menu-btn {
-    font-size: 1.5rem;
-    background: none;
-    border: none;
+
+  nav ul {
+    display: flex;
+    gap: 1rem;
   }
-  
-  /* Ejemplo de sección en móvil */
-  main section {
-    margin-bottom: 2rem;
+}
+
+/* 12) Escritorio amplio */
+@media (min-width: 900px) {
+  .wrapper {
+    max-width: 900px;
   }
-  
-  /* 3) Media Queries: tablet en adelante */
-  @media (min-width: 600px) {
-    body {
-      max-width: 600px;
-      margin: 0 auto;
-    }
-  
-    #menu {
-      display: block;
-    }
-    #menu-btn {
-      display: none;
-    }
-  
-    nav ul {
-      display: flex;
-      gap: 1rem;
-    }
+
+  main {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
   }
-  
-  /* 4) Escritorio amplio */
-  @media (min-width: 900px) {
-    body {
-      max-width: 900px;
-    }
-    
-    main {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 2rem;
-    }
-  }
-  
+}
