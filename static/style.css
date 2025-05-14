@@ -1,0 +1,70 @@
+/* styles.css */
+
+/* 1) Reset básico y box-sizing */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  /* 2) Layout móvil (100% ancho) */
+  body {
+    font-family: sans-serif;
+    line-height: 1.5;
+    padding: 1rem;
+  }
+  
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  #menu {
+    display: none;
+  }
+  
+  #menu-btn {
+    font-size: 1.5rem;
+    background: none;
+    border: none;
+  }
+  
+  /* Ejemplo de sección en móvil */
+  main section {
+    margin-bottom: 2rem;
+  }
+  
+  /* 3) Media Queries: tablet en adelante */
+  @media (min-width: 600px) {
+    body {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+  
+    #menu {
+      display: block;
+    }
+    #menu-btn {
+      display: none;
+    }
+  
+    nav ul {
+      display: flex;
+      gap: 1rem;
+    }
+  }
+  
+  /* 4) Escritorio amplio */
+  @media (min-width: 900px) {
+    body {
+      max-width: 900px;
+    }
+    
+    main {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2rem;
+    }
+  }
+  
