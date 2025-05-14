@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Campana de Gauss</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+    <div id="grafica" style="width: 100%; height: 80vh;"></div> <!-- Añade dimensiones -->
+    
+    <script>
+        var figure = {{ graph_json | safe }};
+        Plotly.newPlot(
+            'grafica',
+            figure.data,    // Extrae solo los datos
+            figure.layout   // Extrae el layout
+        );
+    </script>
+</body>
+</html>

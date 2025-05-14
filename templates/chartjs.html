@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Campana de Gauss con Reset Zoom</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@2.0.1/dist/chartjs-plugin-zoom.min.js"></script>
+  <style>
+    #chart-wrapper {
+      width: 800px;
+      height: 500px;
+      margin: 1rem auto;
+    }
+    #gaussChart {
+      width: 100% !important;
+      height: 100% !important;
+    }
+    #controls {
+      text-align: center;
+      margin-top: 0.5rem;
+    }
+    #resetZoomBtn {
+      padding: 0.4rem 0.8rem;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1 style="text-align:center;">Campana de Gauss Pequeña</h1>
+  <div id="chart-wrapper">
+    <canvas id="gaussChart"></canvas>
+  </div>
+  <div id="controls">
+    <button id="resetZoomBtn">🔄 Restaurar Zoom</button>
+  </div>
+
+  <script>
+    // Datos procedentes del servidor
+    const labels = {{ x_values|tojson }};
+    const data   = {{ y_values|tojson }};
+
+    const ctx = document.getElementById('gaussChart').getContext('2d');
+    const gaussChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels,
+        datasets: [{
+          label: 'Densidad de probabilidad',
+          data,
+          fill: false,
+          borderColor: '#FF4B4B',
+          tension: 0.1
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          x: { title: { display: true, text: 'Valor' } },
+          y: { title: { display: true, text: 'Densidad' } }
+        },
+        plugins: {
+          legend: { display: false },
+          zoom: {
+            pan:   { enabled: true, mode: 'x' },
+            zoom:  { wheel: { enabled: true }, pinch: { enabled: true }, mode: 'x' }
+          }
+        }
+      }
+    });
+
+    // Asociamos el botón para resetear el zoom
+    document.getElementById('resetZoomBtn')
+            .addEventListener('click', () => gaussChart.resetZoom());
+  </script>
+</body>
+</html>
