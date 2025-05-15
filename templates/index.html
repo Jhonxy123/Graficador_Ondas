@@ -14,20 +14,11 @@
   <!-- Wrapper que controla ancho y padding -->
   <div class="wrapper">
     <header>
-      <h1>Graficador de Onda</h1>
+      <h1>Graficador de Espectro</h1>
       <button id="menu-btn">☰</button>
     </header>
-
-    <nav id="menu">
-      <ul>
-        <li><a href="#inicio">Inicio</a></li>
-        <li><a href="#sobre">Sobre</a></li>
-        <li><a href="#contacto">Contacto</a></li>
-      </ul>
-    </nav>
-
     <main>
-      <section id="inicio">
+      <!--<section>
         <h2>Bienvenido</h2>
         <form>
           <p>Digite los siguientes datos</p>
@@ -41,14 +32,129 @@
           <input type="text" id="Ancho_Banda" name="Ancho_Banda" placeholder="KHz">
           <input type="submit" class="btn btn-danger" value="Graficar">
           <input type="reset" class="btn btn-dark" value="Limpiar">
+        </form>-->
+      <div class="container">
+          <form method="post">
+          <fieldset>
+            <legend>Parámetros de Ruido</legend>
+            <label>Temperatura (°K):
+              <input type="number" step="any" name="temperatura" required>
+            </label><br>
+            <label>Bw Ruido (Hz):
+              <input type="number" step="any" name="bw_ruido" required>
+            </label><br>
+            <label>Nivel Ruido Sistema (dBm):
+              <input type="number" step="any" name="nivel_ruido">
+            </label>
+          </fieldset>
+          <fieldset>
+            <legend>Señales</legend>
+            {% for i in range(1,4) %}
+            <div class="senal">
+              <h4>Señal {{ i }}</h4>
+              <label>Potencia (dBm):
+                <input type="number" step="any" name="potencia{{ i }}" required>
+              </label><br>
+              <label>Bw (Hz):
+                <input type="number" step="any" name="bw{{ i }}" required>
+              </label><br>
+              <label>Fc (Hz):
+                <input type="number" step="any" name="fc{{ i }}" required>
+              </label>
+            </div>
+            {% endfor %}
+          </fieldset>
+
+          <!-- Botones de prueba -->
+          <button type="button" id="btnPrueba1" class="btn btn-dark"> Prueba 1</button>
+          <button type="button" id="btnPrueba2" class="btn btn-dark"> Prueba 2</button>
+          <button type="button" id="btnPrueba3" class="btn btn-dark"> Prueba 3</button>
+          <button type="button" id="btnPrueba4" class="btn btn-dark"> Prueba 4</button>
+
+          <!-- Botón para graficar y para limpiar -->
+          <button type="submit" class="btn btn-danger">Graficar</button>
+          <button type="button" class="btn btn-primary" id="btnLimpiar">Limpiar gráfica</button>
         </form>
-      </section>
+
+        <script>
+        // Función común para cargar valores de ejemplo
+        function cargarValores(valores) {
+          document.querySelector('[name="temperatura"]').value = valores.ruido.temperatura;
+          document.querySelector('[name="bw_ruido"]').value   = valores.ruido.bw;
+          document.querySelector('[name="nivel_ruido"]').value = valores.ruido.nivel || '';
+          for (let i = 1; i <= 3; i++) {
+            document.querySelector(`[name="potencia${i}"]`).value = valores.señales[i-1].potencia;
+            document.querySelector(`[name="bw${i}"]`).value       = valores.señales[i-1].bw;
+            document.querySelector(`[name="fc${i}"]`).value       = valores.señales[i-1].fc;
+          }
+        }
+
+        // Escenarios de ejemplo
+        const ejemplos = {
+          prueba1: { ruido:{temperatura:'290',bw:'1e6',nivel:'-100'}, señales:[
+            {potencia:'-30',bw:'200000',fc:'1e6'},
+            {potencia:'-20',bw:'500000',fc:'2e6'},
+            {potencia:'-10',bw:'1000000',fc:'3.5e6'},
+          ]},
+          prueba2: { ruido:{temperatura:'300',bw:'5e5',nivel:'-95'}, señales:[
+            {potencia:'-40',bw:'100000',fc:'5e5'},
+            {potencia:'-25',bw:'300000',fc:'1.5e6'},
+            {potencia:'-10',bw:'800000',fc:'3e6'},
+          ]},
+          prueba3: { ruido:{temperatura:'290',bw:'2e6',nivel:'-80'}, señales:[
+            {potencia:'0',  bw:'500000', fc:'2e6'},
+            {potencia:'5',  bw:'700000', fc:'4e6'},
+            {potencia:'-5', bw:'300000', fc:'6e6'},
+          ]},
+          prueba4: { ruido:{temperatura:'285',bw:'1e6',nivel:''}, señales:[
+            {potencia:'-5',  bw:'1000000', fc:'2e6'},
+            {potencia:'-3',  bw:'1000000', fc:'2.2e6'},
+            {potencia:'-20', bw:'200000',  fc:'5e6'},
+          ]}
+        };
+
+        // Asignar eventos a botones de prueba
+        document.getElementById('btnPrueba1').onclick = () => cargarValores(ejemplos.prueba1);
+        document.getElementById('btnPrueba2').onclick = () => cargarValores(ejemplos.prueba2);
+        document.getElementById('btnPrueba3').onclick = () => cargarValores(ejemplos.prueba3);
+        document.getElementById('btnPrueba4').onclick = () => cargarValores(ejemplos.prueba4);
+
+        // Botón Limpiar: elimina el div de resultado si existe
+        document.getElementById('btnLimpiar').addEventListener('click', () => {
+          const resultado = document.querySelector('.resultado');
+          if (resultado) {
+            resultado.remove();
+          }
+        });
+        </script>
+
+        {% if img_data %}
+        <div class="resultado">
+          <br>
+          <h2>Espectro</h2>
+          <img src="data:image/png;base64,{{ img_data }}" alt="Espectro">
+          <h3>Mediciones</h3>
+          <table>
+            <tr><th>ID Señal</th><th>Pico (dBm)</th><th>SNR (dB)</th></tr>
+            {% for id, pico, snr in mediciones %}
+            <tr>
+              <td>{{ id }}</td>
+              <td>{{ pico|round(2) }}</td>
+              <td>{{ snr|round(2) }}</td>
+            </tr>
+            {% endfor %}
+          </table>
+        </div>
+        {% endif %}
+
+      </div>
+          <!--</section>>-->
       <!-- más secciones -->
     </main>
   </div>
 
   <footer>
-    <p>© Hecho por Juan Sebastían &amp; Karen Daniela Alarcón - 2025</p>
+    <p>© Hecho por Jhon Gonzalez, Karen Alarcón &amp; Sebastían A - 2025</p>
   </footer>
 
   <script src="app.js"></script>
