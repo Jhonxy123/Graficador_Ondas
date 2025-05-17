@@ -132,9 +132,11 @@
         <div class="resultado">
           <br>
           <h2>Espectro</h2>
-          <img src="data:image/png;base64,{{ img_data }}" alt="Espectro">
+          <img src="data:image/png;base64,{{ img_data }}" alt="Espectro" class="img-fluid rounded shadow-sm">
           <h3>Mediciones</h3>
           <table>
+          <div class="table-responsive">
+            <table class="table table-sm table-striped"> 
             <tr><th>ID Señal</th><th>Pico (dBm)</th><th>SNR (dB)</th></tr>
             {% for id, pico, snr in mediciones %}
             <tr>
@@ -144,6 +146,8 @@
             </tr>
             {% endfor %}
           </table>
+            </table>
+          </div>
         </div>
         {% endif %}
 

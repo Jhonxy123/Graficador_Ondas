@@ -133,3 +133,11 @@ footer {
     gap: 2rem;
   }
 }
+
+/* Asegura que la imagen no se salga del contenedor */
+.resultado img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
